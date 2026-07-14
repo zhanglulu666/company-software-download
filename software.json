@@ -30,7 +30,7 @@
       "name_en": "Google Chrome",
       "description": "全球最流行的网页浏览器",
       "category": "浏览器",
-      "download_url": "https://www.google.com/chrome/",
+      "download_url": "https://www.google.cn/chrome/?ref=www.suolie.com",
       "download_type": "link",
       "icon": "🌐"
     },
@@ -80,7 +80,7 @@
       "name_en": "PotPlayer",
       "description": "全能视频播放器，支持几乎所有格式",
       "category": "媒体工具",
-      "download_url": "https://potplayer.daum.net/",
+      "download_url": "https://potplayer.tv/?lang=zh_CN",
       "download_type": "link",
       "icon": "▶️"
     },
