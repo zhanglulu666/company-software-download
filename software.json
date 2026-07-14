@@ -1,178 +1,188 @@
 {
-  "last_updated": "",
-  "pinned": [
-    {
-      "id": "doc-ax-login",
-      "name": "2025年AX登录教程",
-      "description": "公司AX系统登录配置指南",
-      "icon": "📘",
-      "download_url": "files/2025年ax登录教程.pptx"
-    },
-    {
-      "id": "doc-c-clean",
-      "name": "C盘清理与Outlook邮箱扩容培训",
-      "description": "系统优化与邮箱管理教程",
-      "icon": "📗",
-      "download_url": "files/C盘清理与Outlook 邮箱扩容培训更新.pptx"
-    },
-    {
-      "id": "doc-software-guide",
-      "name": "公司通讯软件下载流程",
-      "description": "各通讯软件的下载安装说明",
-      "icon": "📙",
-      "download_url": "files/关于公司通讯软件下载流程更新.docx"
-    }
-  ],
-  "software": [
-    {
-      "id": "chrome",
-      "name": "谷歌浏览器",
-      "name_en": "Google Chrome",
-      "description": "全球最流行的网页浏览器",
-      "category": "浏览器",
-      "download_url": "https://www.google.cn/chrome/?ref=www.suolie.com",
-      "download_type": "link",
-      "icon": "🌐"
-    },
-    {
-      "id": "sogou-browser",
-      "name": "搜狗浏览器",
-      "name_en": "Sogou Browser",
-      "description": "双核高速浏览器，兼容 IE 和 Chrome 内核",
-      "category": "浏览器",
-      "download_url": "https://ie.sogou.com/",
-      "download_type": "link",
-      "icon": "🦊"
-    },
-    {
-      "id": "wework",
-      "name": "企业微信",
-      "name_en": "WeCom",
-      "description": "腾讯出品的企业通讯与办公协作平台",
-      "category": "通讯办公",
-      "download_url": "https://work.weixin.qq.com/",
-      "download_type": "link",
-      "icon": "💼"
-    },
-    {
-      "id": "zoom",
-      "name": "Zoom 会议",
-      "name_en": "Zoom",
-      "description": "全球领先的云视频会议软件",
-      "category": "通讯办公",
-      "download_url": "https://zoom.us/download",
-      "download_type": "link",
-      "icon": "📹"
-    },
-    {
-      "id": "tencent-meeting",
-      "name": "腾讯会议",
-      "name_en": "Tencent Meeting",
-      "description": "腾讯出品的云视频会议软件",
-      "category": "通讯办公",
-      "download_url": "https://meeting.tencent.com/download/",
-      "download_type": "link",
-      "icon": "🎥"
-    },
-    {
-      "id": "potplayer",
-      "name": "PotPlayer 播放器",
-      "name_en": "PotPlayer",
-      "description": "全能视频播放器，支持几乎所有格式",
-      "category": "媒体工具",
-      "download_url": "https://potplayer.tv/?lang=zh_CN",
-      "download_type": "link",
-      "icon": "▶️"
-    },
-    {
-      "id": "office-tool",
-      "name": "Office Tool Plus",
-      "name_en": "Office Tool Plus",
-      "description": "Microsoft Office 部署与管理工具",
-      "category": "系统工具",
-      "download_url": "https://otp.landian.vip/",
-      "download_type": "link",
-      "icon": "📎"
-    },
-    {
-      "id": "7zip",
-      "name": "7-Zip 压缩",
-      "name_en": "7-Zip",
-      "description": "开源免费的高压缩比压缩解压工具",
-      "category": "系统工具",
-      "download_url": "https://www.7-zip.org/",
-      "download_type": "link",
-      "icon": "🗜️"
-    },
-    {
-      "id": "winrar",
-      "name": "WinRAR 压缩",
-      "name_en": "WinRAR",
-      "description": "经典压缩解压工具，支持 RAR/ZIP 等格式",
-      "category": "系统工具",
-      "download_url": "https://www.winrar.com.cn/",
-      "download_type": "link",
-      "icon": "📦"
-    },
-    {
-      "id": "kms-activation",
-      "name": "Windows/Office 激活工具",
-      "name_en": "KMS Activation",
-      "description": "Windows 和 Office 激活工具（老版本，稳定可用）",
-      "category": "系统工具",
-      "download_url": "files/windows和office激活老版本.zip",
-      "download_type": "local",
-      "icon": "🔑"
-    },
-    {
-      "id": "receiver",
-      "name": "Citrix Receiver",
-      "name_en": "Citrix Receiver 4.5",
-      "description": "远程桌面与虚拟应用接入客户端",
-      "category": "办公软件",
-      "download_url": "files/Receiver 4.5 for Windows.exe",
-      "download_type": "local",
-      "icon": "🖥️"
-    },
-    {
-      "id": "asset-management",
-      "name": "公司资产管理软件",
-      "name_en": "Asset Management",
-      "description": "公司资产登记与管理工具",
-      "category": "办公软件",
-      "download_url": "files/公司资产管理软件.exe",
-      "download_type": "local",
-      "icon": "📊"
-    },
-    {
-      "id": "uninstaller",
-      "name": "卸载清理软件",
-      "name_en": "Uninstaller/Cleaner",
-      "description": "彻底卸载和清理残留文件的工具",
-      "category": "系统工具",
-      "download_url": "files/卸载清理软件.exe",
-      "download_type": "local",
-      "icon": "🧹"
-    },
-    {
-      "id": "sunlogin",
-      "name": "向日葵远程",
-      "name_en": "Sunlogin",
-      "description": "远程桌面控制软件（简洁版）",
-      "category": "远程工具",
-      "download_url": "files/向日葵简洁版.exe",
-      "download_type": "local",
-      "icon": "☀️"
-    },
-    {
-      "id": "driver-ceo",
-      "name": "驱动总裁",
-      "name_en": "Driver CEO 2.17",
-      "description": "万能驱动安装与管理工具",
-      "category": "系统工具",
-      "download_url": "files/驱动总裁2.17.0.0.exe",
-      "download_type": "local",
-      "icon": "⚙️"
-    }
-  ]
+    "last_updated":  "",
+    "pinned":  [
+                   {
+                       "id":  "doc-ax-login",
+                       "name":  "2025年AX登录教程",
+                       "description":  "公司AX系统登录配置指南",
+                       "icon":  "📘",
+                       "download_url":  "files/2025年ax登录教程.pptx"
+                   },
+                   {
+                       "id":  "doc-c-clean",
+                       "name":  "C盘清理与Outlook邮箱扩容培训",
+                       "description":  "系统优化与邮箱管理教程",
+                       "icon":  "📗",
+                       "download_url":  "files/C盘清理与Outlook 邮箱扩容培训更新.pptx"
+                   },
+                   {
+                       "id":  "doc-software-guide",
+                       "name":  "公司通讯软件下载流程",
+                       "description":  "各通讯软件的下载安装说明",
+                       "icon":  "📙",
+                       "download_url":  "files/关于公司通讯软件下载流程更新.docx"
+                   }
+               ],
+    "software":  [
+                     {
+                         "id":  "av-software",
+                         "name":  "公司杀毒软件",
+                         "name_en":  "Company Antivirus",
+                         "description":  "公司统一杀毒防护软件",
+                         "category":  "安全软件",
+                         "download_url":  "files/公司杀毒软件.exe",
+                         "download_type":  "local",
+                         "icon":  "🛡️"
+                     },
+                     {
+                         "id":  "chrome",
+                         "name":  "谷歌浏览器",
+                         "name_en":  "Google Chrome",
+                         "description":  "全球最流行的网页浏览器",
+                         "category":  "浏览器",
+                         "download_url":  "https://www.google.cn/chrome/?ref=www.suolie.com",
+                         "download_type":  "link",
+                         "icon":  "🌐"
+                     },
+                     {
+                         "id":  "sogou-browser",
+                         "name":  "搜狗浏览器",
+                         "name_en":  "Sogou Browser",
+                         "description":  "双核高速浏览器，兼容 IE 和 Chrome 内核",
+                         "category":  "浏览器",
+                         "download_url":  "https://ie.sogou.com/",
+                         "download_type":  "link",
+                         "icon":  "🦊"
+                     },
+                     {
+                         "id":  "wework",
+                         "name":  "企业微信",
+                         "name_en":  "WeCom",
+                         "description":  "腾讯出品的企业通讯与办公协作平台",
+                         "category":  "通讯办公",
+                         "download_url":  "https://work.weixin.qq.com/",
+                         "download_type":  "link",
+                         "icon":  "💼"
+                     },
+                     {
+                         "id":  "zoom",
+                         "name":  "Zoom 会议",
+                         "name_en":  "Zoom",
+                         "description":  "全球领先的云视频会议软件",
+                         "category":  "通讯办公",
+                         "download_url":  "https://zoom.us/download",
+                         "download_type":  "link",
+                         "icon":  "📹"
+                     },
+                     {
+                         "id":  "tencent-meeting",
+                         "name":  "腾讯会议",
+                         "name_en":  "Tencent Meeting",
+                         "description":  "腾讯出品的云视频会议软件",
+                         "category":  "通讯办公",
+                         "download_url":  "https://meeting.tencent.com/download/",
+                         "download_type":  "link",
+                         "icon":  "🎥"
+                     },
+                     {
+                         "id":  "potplayer",
+                         "name":  "PotPlayer 播放器",
+                         "name_en":  "PotPlayer",
+                         "description":  "全能视频播放器，支持几乎所有格式",
+                         "category":  "媒体工具",
+                         "download_url":  "https://potplayer.tv/?lang=zh_CN",
+                         "download_type":  "link",
+                         "icon":  "▶️"
+                     },
+                     {
+                         "id":  "office-tool",
+                         "name":  "Office Tool Plus",
+                         "name_en":  "Office Tool Plus",
+                         "description":  "Microsoft Office 部署与管理工具",
+                         "category":  "系统工具",
+                         "download_url":  "https://otp.landian.vip/",
+                         "download_type":  "link",
+                         "icon":  "📎"
+                     },
+                     {
+                         "id":  "7zip",
+                         "name":  "7-Zip 压缩",
+                         "name_en":  "7-Zip",
+                         "description":  "开源免费的高压缩比压缩解压工具",
+                         "category":  "系统工具",
+                         "download_url":  "https://www.7-zip.org/",
+                         "download_type":  "link",
+                         "icon":  "🗜️"
+                     },
+                     {
+                         "id":  "winrar",
+                         "name":  "WinRAR 压缩",
+                         "name_en":  "WinRAR",
+                         "description":  "经典压缩解压工具，支持 RAR/ZIP 等格式",
+                         "category":  "系统工具",
+                         "download_url":  "https://www.winrar.com.cn/",
+                         "download_type":  "link",
+                         "icon":  "📦"
+                     },
+                     {
+                         "id":  "kms-activation",
+                         "name":  "Windows/Office 激活工具",
+                         "name_en":  "KMS Activation",
+                         "description":  "Windows 和 Office 激活工具（老版本，稳定可用）",
+                         "category":  "系统工具",
+                         "download_url":  "files/windows和office激活老版本.zip",
+                         "download_type":  "local",
+                         "icon":  "🔑"
+                     },
+                     {
+                         "id":  "receiver",
+                         "name":  "Citrix Receiver",
+                         "name_en":  "Citrix Receiver 4.5",
+                         "description":  "远程桌面与虚拟应用接入客户端",
+                         "category":  "办公软件",
+                         "download_url":  "files/Receiver 4.5 for Windows.exe",
+                         "download_type":  "local",
+                         "icon":  "🖥️"
+                     },
+                     {
+                         "id":  "asset-management",
+                         "name":  "公司资产管理软件",
+                         "name_en":  "Asset Management",
+                         "description":  "公司资产登记与管理工具",
+                         "category":  "办公软件",
+                         "download_url":  "files/公司资产管理软件.exe",
+                         "download_type":  "local",
+                         "icon":  "📊"
+                     },
+                     {
+                         "id":  "uninstaller",
+                         "name":  "卸载清理软件",
+                         "name_en":  "Uninstaller/Cleaner",
+                         "description":  "彻底卸载和清理残留文件的工具",
+                         "category":  "系统工具",
+                         "download_url":  "files/卸载清理软件.exe",
+                         "download_type":  "local",
+                         "icon":  "🧹"
+                     },
+                     {
+                         "id":  "sunlogin",
+                         "name":  "向日葵远程",
+                         "name_en":  "Sunlogin",
+                         "description":  "远程桌面控制软件（简洁版）",
+                         "category":  "远程工具",
+                         "download_url":  "files/向日葵简洁版.exe",
+                         "download_type":  "local",
+                         "icon":  "☀️"
+                     },
+                     {
+                         "id":  "driver-ceo",
+                         "name":  "驱动总裁",
+                         "name_en":  "Driver CEO 2.17",
+                         "description":  "万能驱动安装与管理工具",
+                         "category":  "系统工具",
+                         "download_url":  "files/驱动总裁2.17.0.0.exe",
+                         "download_type":  "local",
+                         "icon":  "⚙️"
+                     }
+                 ]
 }
