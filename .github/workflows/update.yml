@@ -61,10 +61,15 @@ jobs:
               m = json.load(f)
           repo = f"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}"
           for s in m['software']:
-              a = s.pop('_local_file', None) or ''
-              n = s.pop('_asset_name', None) or ''
-              if a and n:
-                  s['download_url'] = f'{repo}/releases/latest/download/{n}'
+              local = s.pop(_local_file, None) or  + "
+")
+        new_lines.append('              s.pop(''_asset_name'', None)' + "
+")
+        new_lines.append('              if local:' + "
+")
+        new_lines.append('                  fname = os.path.basename(local)' + "
+")
+        new_lines.append('                  s[''download_url''] = f''{repo}/releases/latest/download/{fname}
           with open('software.json','w',encoding='utf-8') as f:
               json.dump(m, f, ensure_ascii=False, indent=2)
           print('software.json updated')
