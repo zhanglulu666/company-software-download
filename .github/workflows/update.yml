@@ -4,11 +4,6 @@ on:
   schedule:
     - cron: "0 16 * * 0"
   workflow_dispatch:
-    inputs:
-      force_update:
-        description: "强制重新下载所有软件（忽略版本检测）"
-        type: boolean
-        default: false
 
 permissions:
   contents: write
@@ -19,17 +14,14 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Install dependencies
-        run: |
-          pip install requests beautifulsoup4
+      - name: Install Python deps
+        run: pip install requests beautifulsoup4
 
       - name: Run update script
         env:
@@ -38,58 +30,56 @@ jobs:
           mkdir -p downloads
           python scripts/update.py
 
+      - name: Check downloads
+        id: check
+        run: |
+          FILE_COUNT=$(ls downloads/* 2>/dev/null | wc -l)
+          echo "Downloaded $FILE_COUNT file(s)"
+          echo "file_count=$FILE_COUNT" >> $GITHUB_OUTPUT
+
       - name: Upload to GitHub Release
+        if: steps.check.outputs.file_count != '0'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest
           name: "软件包 - 每周更新"
-          body: |
-            ## 📦 公司常用软件安装包
-
-            本 Release 包含所有常用软件的 Windows 安装包。
-            下载后请核对 SHA256 校验值（见软件页面）。
+          body: "📦 公司常用软件安装包，每周自动更新"
           files: downloads/*
-          draft: false
-          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Update software.json download URLs
+      - name: Update software.json URLs
+        if: steps.check.outputs.file_count != '0'
         run: |
           python3 -c "
           import json, os
-          with open('software.json', 'r', encoding='utf-8') as f:
-              manifest = json.load(f)
-          repo_url = os.environ.get('GITHUB_SERVER_URL', 'https://github.com') + '/' + os.environ.get('GITHUB_REPOSITORY', '')
-          for sw in manifest['software']:
-              if sw.get('_asset_name'):
-                  sw['download_url'] = repo_url + '/releases/latest/download/' + sw['_asset_name']
-                  sw.pop('_local_file', None)
-                  sw.pop('_asset_name', None)
-          with open('software.json', 'w', encoding='utf-8') as f:
-              json.dump(manifest, f, ensure_ascii=False, indent=2)
-          print('Updated software.json with download URLs')
+          with open('software.json','r',encoding='utf-8') as f: m=json.load(f)
+          repo=f\"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}\"
+          for s in m['software']:
+              a=s.pop('_local_file',None) or ''
+              n=s.pop('_asset_name',None) or ''
+              if a and n: s['download_url']=f'{repo}/releases/latest/download/{n}'
+          with open('software.json','w',encoding='utf-8') as f: json.dump(m,f,ensure_ascii=False,indent=2)
+          print('software.json updated')
           "
 
-      - name: Commit updated manifest
+      - name: Commit manifest
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add software.json
-          git diff --staged --quiet || git commit -m "🤖 Auto-update software manifest [skip ci]"
+          git diff --staged --quiet || git commit -m "🤖 Auto-update [skip ci]"
           git push
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v5
 
-      - name: Build Pages
+      - name: Build site
         run: |
           mkdir -p _site
           cp index.html style.css software.json _site/
           touch _site/.nojekyll
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
 
@@ -103,6 +93,5 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy to GitHub Pages
+      - uses: actions/deploy-pages@v4
         id: deployment
-        uses: actions/deploy-pages@v4
