@@ -25,12 +25,22 @@
                ],
     "software":  [
                      {
-                         "id":  "av-software",
-                         "name":  "公司杀毒软件",
-                         "name_en":  "Company Antivirus",
-                         "description":  "公司统一杀毒防护软件",
+                         "id":  "av-software-1",
+                         "name":  "公司杀毒软件（分卷1/2）",
+                         "name_en":  "Company Antivirus (part 1/2)",
+                         "description":  "公司统一杀毒防护软件 - 下载两个分卷后用7-Zip解压",
                          "category":  "安全软件",
-                         "download_url":  "files/公司杀毒软件.exe",
+                         "download_url":  "files/公司杀毒软件.zip.001",
+                         "download_type":  "local",
+                         "icon":  "🛡️"
+                     },
+                     {
+                         "id":  "av-software-2",
+                         "name":  "公司杀毒软件（分卷2/2）",
+                         "name_en":  "Company Antivirus (part 2/2)",
+                         "description":  "公司统一杀毒防护软件 - 两个分卷放在同一目录后解压",
+                         "category":  "安全软件",
+                         "download_url":  "files/公司杀毒软件.zip.002",
                          "download_type":  "local",
                          "icon":  "🛡️"
                      },

@@ -1,2 +1,1 @@
 files/公司资产管理软件.exe filter=lfs diff=lfs merge=lfs -text
-files/公司杀毒软件.exe filter=lfs diff=lfs merge=lfs -text
