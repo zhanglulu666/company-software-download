@@ -1,4 +1,4 @@
-﻿name: Weekly Software Update
+name: Weekly Software Update
 
 on:
   schedule:

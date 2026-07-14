@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """
 公司常用软件自动更新脚本
 - 从官方源下载最新 Windows 安装包
