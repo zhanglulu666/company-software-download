@@ -24,51 +24,58 @@ jobs:
         run: pip install requests beautifulsoup4
 
       - name: Run update script
+        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir -p downloads
           python scripts/update.py
 
-      - name: Check downloads
+      - name: Check download results
         id: check
+        shell: bash
         run: |
-          FILE_COUNT=$(ls downloads/* 2>/dev/null | wc -l)
-          echo "Downloaded $FILE_COUNT file(s)"
-          echo "file_count=$FILE_COUNT" >> $GITHUB_OUTPUT
+          FILE_COUNT=$(find downloads -type f 2>/dev/null | wc -l)
+          echo "Downloaded files: $FILE_COUNT"
+          echo "count=$FILE_COUNT" >> $GITHUB_OUTPUT
+          find downloads -type f -exec ls -lh {} \; 2>/dev/null || true
 
       - name: Upload to GitHub Release
-        if: steps.check.outputs.file_count != '0'
+        if: steps.check.outputs.count != '0'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest
-          name: "软件包 - 每周更新"
+          name: "软件包"
           body: "📦 公司常用软件安装包，每周自动更新"
           files: downloads/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Update software.json URLs
-        if: steps.check.outputs.file_count != '0'
+      - name: Update software.json download URLs
+        if: steps.check.outputs.count != '0'
+        shell: bash
         run: |
-          python3 -c "
+          python3 << 'PYEOF'
           import json, os
-          with open('software.json','r',encoding='utf-8') as f: m=json.load(f)
-          repo=f\"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}\"
+          with open('software.json','r',encoding='utf-8') as f:
+              m = json.load(f)
+          repo = f"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}"
           for s in m['software']:
-              a=s.pop('_local_file',None) or ''
-              n=s.pop('_asset_name',None) or ''
-              if a and n: s['download_url']=f'{repo}/releases/latest/download/{n}'
-          with open('software.json','w',encoding='utf-8') as f: json.dump(m,f,ensure_ascii=False,indent=2)
+              a = s.pop('_local_file', None) or ''
+              n = s.pop('_asset_name', None) or ''
+              if a and n:
+                  s['download_url'] = f'{repo}/releases/latest/download/{n}'
+          with open('software.json','w',encoding='utf-8') as f:
+              json.dump(m, f, ensure_ascii=False, indent=2)
           print('software.json updated')
-          "
+          PYEOF
 
       - name: Commit manifest
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add software.json
-          git diff --staged --quiet || git commit -m "🤖 Auto-update [skip ci]"
+          git diff --staged --quiet || git commit -m "🤖 update [skip ci]"
           git push
 
       - uses: actions/configure-pages@v5
@@ -85,6 +92,7 @@ jobs:
 
   deploy:
     needs: update
+    if: always()
     runs-on: ubuntu-latest
     permissions:
       pages: write
