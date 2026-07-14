@@ -5,14 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>公司常用软件下载站</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📦</text></svg>">
 </head>
 <body>
   <header class="header">
     <div class="header-inner">
       <h1 class="site-title">📦 公司常用软件下载站</h1>
-      <p class="site-subtitle">Windows 必备软件合集 · 每周自动更新</p>
-      <div class="last-updated" id="lastUpdated">加载中...</div>
+      <p class="site-subtitle">Windows 必备软件合集 · 一键直达官网下载</p>
+      <p class="site-tip">💡 点击「官网下载」跳转到各软件官方下载页面</p>
     </div>
   </header>
 
@@ -20,13 +19,7 @@
     <div class="toolbar">
       <div class="search-wrapper">
         <span class="search-icon">🔍</span>
-        <input
-          type="text"
-          id="searchInput"
-          class="search-input"
-          placeholder="搜索软件名称..."
-          autocomplete="off"
-        >
+        <input type="text" id="searchInput" class="search-input" placeholder="搜索软件名称..." autocomplete="off">
         <button class="search-clear" id="searchClear" title="清除">✕</button>
       </div>
       <div class="filters" id="filters"></div>
@@ -35,7 +28,6 @@
     <div class="grid" id="softwareGrid">
       <div class="loading">正在加载软件列表...</div>
     </div>
-
     <div class="empty-state" id="emptyState" style="display:none">
       <div class="empty-icon">📭</div>
       <p>没有找到匹配的软件</p>
@@ -43,118 +35,76 @@
   </main>
 
   <footer class="footer">
-    <p>本站所有软件均来自官方渠道，仅供公司内部使用</p>
-    <p class="footer-small">Powered by GitHub Pages · 每周一自动更新</p>
+    <p>本站所有软件均链接至官方网站，仅供公司内部使用</p>
+    <p class="footer-small">Powered by GitHub Pages</p>
   </footer>
 
   <script>
-  (function() {
-    var data = null;
-    var activeCategory = "all";
+  (function(){
+    var data=null,activeCategory="all";
 
-    function formatDate(iso) {
-      if (!iso) return "暂无";
-      var d = new Date(iso);
-      return d.getFullYear() + "-" +
-        String(d.getMonth() + 1).padStart(2, "0") + "-" +
-        String(d.getDate()).padStart(2, "0") + " " +
-        String(d.getHours()).padStart(2, "0") + ":" +
-        String(d.getMinutes()).padStart(2, "0");
-    }
-
-    function formatSize(mb) {
-      if (!mb || mb === 0) return "";
-      if (mb >= 1024) return (mb / 1024).toFixed(1) + " GB";
-      return mb.toFixed(1) + " MB";
-    }
-
-    function renderFilters(categories) {
-      var container = document.getElementById("filters");
-      var html = '<button class="filter-btn active" data-cat="all">全部</button>';
-      categories.forEach(function(cat) {
-        html += '<button class="filter-btn" data-cat="' + cat + '">' + cat + '</button>';
-      });
-      container.innerHTML = html;
-
-      container.querySelectorAll(".filter-btn").forEach(function(btn) {
-        btn.addEventListener("click", function() {
-          container.querySelectorAll(".filter-btn").forEach(function(b) { b.classList.remove("active"); });
-          btn.classList.add("active");
-          activeCategory = btn.dataset.cat;
+    function renderFilters(categories){
+      var c=document.getElementById("filters");
+      var h='<button class="filter-btn active" data-cat="all">全部</button>';
+      categories.forEach(function(cat){h+='<button class="filter-btn" data-cat="'+cat+'">'+cat+'</button>'});
+      c.innerHTML=h;
+      c.querySelectorAll(".filter-btn").forEach(function(b){
+        b.addEventListener("click",function(){
+          c.querySelectorAll(".filter-btn").forEach(function(x){x.classList.remove("active")});
+          b.classList.add("active");
+          activeCategory=b.dataset.cat;
           renderGrid();
         });
       });
     }
 
-    function renderGrid() {
-      var grid = document.getElementById("softwareGrid");
-      var empty = document.getElementById("emptyState");
-      var searchTerm = document.getElementById("searchInput").value.toLowerCase().trim();
+    function renderGrid(){
+      var grid=document.getElementById("softwareGrid");
+      var empty=document.getElementById("emptyState");
+      var s=document.getElementById("searchInput").value.toLowerCase().trim();
 
-      var filtered = data.software.filter(function(s) {
-        var matchCat = activeCategory === "all" || s.category === activeCategory;
-        var matchSearch = !searchTerm ||
-          s.name.toLowerCase().includes(searchTerm) ||
-          s.name_en.toLowerCase().includes(searchTerm) ||
-          s.description.toLowerCase().includes(searchTerm);
-        return matchCat && matchSearch;
+      var filtered=data.software.filter(function(x){
+        var mc=activeCategory==="all"||x.category===activeCategory;
+        var ms=!s||x.name.toLowerCase().includes(s)||x.name_en.toLowerCase().includes(s)||x.description.toLowerCase().includes(s);
+        return mc&&ms;
       });
 
-      if (filtered.length === 0) {
-        grid.innerHTML = "";
-        empty.style.display = "block";
-        return;
-      }
-      empty.style.display = "none";
+      if(!filtered.length){grid.innerHTML="";empty.style.display="block";return;}
+      empty.style.display="none";
 
-      grid.innerHTML = filtered.map(function(s) {
-        var hasDownload = s.download_url && s.download_url.length > 0;
-        return '<div class="card">' +
-          '<div class="card-icon">' + (s.icon || "📦") + '</div>' +
-          '<div class="card-body">' +
-            '<h3 class="card-title">' + s.name + '</h3>' +
-            '<p class="card-name-en">' + s.name_en + '</p>' +
-            '<p class="card-desc">' + s.description + '</p>' +
-            '<div class="card-meta">' +
-              (s.version ? '<span class="badge badge-version">v' + s.version + '</span>' : '<span class="badge badge-pending">待更新</span>') +
-              (s.size_mb ? '<span class="badge badge-size">' + formatSize(s.size_mb) + '</span>' : '') +
-              '<span class="badge badge-cat">' + s.category + '</span>' +
-            '</div>' +
-          '</div>' +
-          '<div class="card-actions">' +
-            (hasDownload
-              ? '<a href="' + s.download_url + '" class="btn-download" title="下载 ' + s.name + '">⬇ 下载</a>'
-              : '<button class="btn-download disabled" disabled>暂无下载</button>') +
-          '</div>' +
+      grid.innerHTML=filtered.map(function(x){
+        var isLink=x.download_type==="link";
+        var label=isLink?"🔗 官网下载":"⬇ 直接下载";
+        var cls=isLink?"btn-download btn-link":"btn-download btn-local";
+        var target=isLink?' target="_blank" rel="noopener"':"";
+        return '<div class="card">'+
+          '<div class="card-icon">'+(x.icon||"📦")+'</div>'+
+          '<div class="card-body">'+
+            '<h3 class="card-title">'+x.name+'</h3>'+
+            '<p class="card-name-en">'+x.name_en+'</p>'+
+            '<p class="card-desc">'+x.description+'</p>'+
+            '<div class="card-meta">'+
+              '<span class="badge badge-cat">'+x.category+'</span>'+
+            '</div>'+
+          '</div>'+
+          '<div class="card-actions">'+
+            '<a href="'+x.download_url+'" class="'+cls+'"'+target+'>'+label+'</a>'+
+          '</div>'+
         '</div>';
       }).join("");
     }
 
-    // Load data
-    fetch("software.json")
-      .then(function(r) { return r.json(); })
-      .then(function(json) {
-        data = json;
-        document.getElementById("lastUpdated").textContent = "🕐 最后更新：" + formatDate(json.last_updated);
+    fetch("software.json").then(function(r){return r.json()}).then(function(j){
+      data=j;
+      var cats=[];j.software.forEach(function(x){if(cats.indexOf(x.category)===-1)cats.push(x.category)});
+      renderFilters(cats);renderGrid();
+    }).catch(function(e){
+      document.getElementById("softwareGrid").innerHTML='<div class="loading error">⚠️ 加载失败：'+e.message+'</div>';
+    });
 
-        var categories = [];
-        json.software.forEach(function(s) {
-          if (categories.indexOf(s.category) === -1) categories.push(s.category);
-        });
-        renderFilters(categories);
-        renderGrid();
-      })
-      .catch(function(err) {
-        document.getElementById("softwareGrid").innerHTML =
-          '<div class="loading error">⚠️ 加载软件列表失败：' + err.message + '</div>';
-        document.getElementById("lastUpdated").textContent = "加载失败";
-      });
-
-    // Search
-    document.getElementById("searchInput").addEventListener("input", renderGrid);
-    document.getElementById("searchClear").addEventListener("click", function() {
-      document.getElementById("searchInput").value = "";
-      renderGrid();
+    document.getElementById("searchInput").addEventListener("input",renderGrid);
+    document.getElementById("searchClear").addEventListener("click",function(){
+      document.getElementById("searchInput").value="";renderGrid();
     });
   })();
   </script>

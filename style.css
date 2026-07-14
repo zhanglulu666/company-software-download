@@ -1,203 +1,51 @@
-/* === Reset & Base === */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{font-size:16px;scroll-behavior:smooth}
 body{
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
-  background:#f0f2f5;
-  color:#1d2129;
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  line-height:1.6;
+  background:#f0f2f5;color:#1d2129;min-height:100vh;display:flex;flex-direction:column;line-height:1.6;
 }
-
-/* === Header === */
 .header{
   background:linear-gradient(135deg,#1a73e8 0%,#0d47a1 100%);
-  color:#fff;
-  padding:48px 24px 40px;
-  text-align:center;
+  color:#fff;padding:40px 24px 36px;text-align:center;
 }
 .header-inner{max-width:960px;margin:0 auto}
-.site-title{font-size:2rem;font-weight:700;margin-bottom:8px;letter-spacing:.5px}
-.site-subtitle{font-size:1rem;opacity:.85;margin-bottom:16px}
-.last-updated{
-  display:inline-block;
-  background:rgba(255,255,255,.15);
-  padding:6px 18px;
-  border-radius:20px;
-  font-size:.85rem;
-  backdrop-filter:blur(4px);
-}
-
-/* === Main === */
+.site-title{font-size:2rem;font-weight:700;margin-bottom:6px}
+.site-subtitle{font-size:1rem;opacity:.85}
+.site-tip{font-size:.85rem;opacity:.7;margin-top:10px;background:rgba(255,255,255,.12);display:inline-block;padding:4px 16px;border-radius:14px}
 .main{max-width:1100px;margin:0 auto;padding:28px 24px 60px;flex:1;width:100%}
-
-/* === Toolbar === */
 .toolbar{margin-bottom:28px}
-.search-wrapper{
-  position:relative;
-  max-width:480px;
-  margin:0 auto 18px;
-}
-.search-icon{
-  position:absolute;
-  left:16px;
-  top:50%;
-  transform:translateY(-50%);
-  font-size:1.1rem;
-  pointer-events:none;
-}
-.search-input{
-  width:100%;
-  padding:14px 44px 14px 46px;
-  border:2px solid #e0e0e0;
-  border-radius:12px;
-  font-size:.95rem;
-  background:#fff;
-  outline:none;
-  transition:border-color .2s,box-shadow .2s;
-}
-.search-input:focus{
-  border-color:#1a73e8;
-  box-shadow:0 0 0 3px rgba(26,115,232,.12);
-}
-.search-clear{
-  position:absolute;
-  right:12px;
-  top:50%;
-  transform:translateY(-50%);
-  border:none;
-  background:#e0e0e0;
-  color:#666;
-  width:26px;
-  height:26px;
-  border-radius:50%;
-  cursor:pointer;
-  font-size:.75rem;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  transition:background .2s;
-}
+.search-wrapper{position:relative;max-width:480px;margin:0 auto 18px}
+.search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:1.1rem;pointer-events:none}
+.search-input{width:100%;padding:14px 44px 14px 46px;border:2px solid #e0e0e0;border-radius:12px;font-size:.95rem;background:#fff;outline:none;transition:border-color .2s,box-shadow .2s}
+.search-input:focus{border-color:#1a73e8;box-shadow:0 0 0 3px rgba(26,115,232,.12)}
+.search-clear{position:absolute;right:12px;top:50%;transform:translateY(-50%);border:none;background:#e0e0e0;color:#666;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:.75rem;display:flex;align-items:center;justify-content:center;transition:background .2s}
 .search-clear:hover{background:#c0c0c0}
-
-.filters{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  justify-content:center;
-}
-.filter-btn{
-  padding:6px 18px;
-  border:1.5px solid #d0d0d0;
-  background:#fff;
-  border-radius:20px;
-  font-size:.85rem;
-  cursor:pointer;
-  transition:all .2s;
-  color:#555;
-}
+.filters{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.filter-btn{padding:6px 18px;border:1.5px solid #d0d0d0;background:#fff;border-radius:20px;font-size:.85rem;cursor:pointer;transition:all .2s;color:#555}
 .filter-btn:hover{border-color:#1a73e8;color:#1a73e8}
-.filter-btn.active{
-  background:#1a73e8;
-  color:#fff;
-  border-color:#1a73e8;
-}
-
-/* === Grid === */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
-  gap:20px;
-}
-.loading{
-  text-align:center;
-  padding:60px 0;
-  color:#999;
-  font-size:1.05rem;
-  grid-column:1/-1;
-}
+.filter-btn.active{background:#1a73e8;color:#fff;border-color:#1a73e8}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px}
+.loading{text-align:center;padding:60px 0;color:#999;font-size:1.05rem;grid-column:1/-1}
 .loading.error{color:#d93025}
-
-/* === Card === */
-.card{
-  background:#fff;
-  border-radius:14px;
-  padding:24px;
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-  box-shadow:0 2px 8px rgba(0,0,0,.06);
-  border:1px solid #e8eaed;
-  transition:transform .2s,box-shadow .2s;
-}
-.card:hover{
-  transform:translateY(-3px);
-  box-shadow:0 8px 24px rgba(0,0,0,.1);
-}
+.card{background:#fff;border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);border:1px solid #e8eaed;transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
 .card-icon{font-size:2.6rem;text-align:center;line-height:1}
 .card-body{flex:1;display:flex;flex-direction:column;gap:6px}
 .card-title{font-size:1.1rem;font-weight:700;color:#1d2129}
 .card-name-en{font-size:.8rem;color:#999;margin-top:-2px}
 .card-desc{font-size:.85rem;color:#666;line-height:1.5}
-
 .card-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:8px}
-.badge{
-  display:inline-block;
-  padding:3px 10px;
-  border-radius:12px;
-  font-size:.75rem;
-  font-weight:500;
-}
-.badge-version{background:#e8f0fe;color:#1a73e8}
-.badge-pending{background:#fff3e0;color:#e65100}
-.badge-size{background:#e8f5e9;color:#2e7d32}
+.badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:.75rem;font-weight:500}
 .badge-cat{background:#f3e5f5;color:#7b1fa2}
-
-/* === Card Actions === */
 .card-actions{text-align:center}
-.btn-download{
-  display:inline-block;
-  padding:10px 36px;
-  background:linear-gradient(135deg,#1a73e8,#1557b0);
-  color:#fff;
-  border:none;
-  border-radius:10px;
-  font-size:.9rem;
-  font-weight:600;
-  cursor:pointer;
-  text-decoration:none;
-  transition:opacity .2s,transform .2s;
-}
+.btn-download{display:inline-block;padding:10px 36px;border:none;border-radius:10px;font-size:.9rem;font-weight:600;cursor:pointer;text-decoration:none;transition:opacity .2s,transform .2s;color:#fff}
+.btn-link{background:linear-gradient(135deg,#1a73e8,#1557b0)}
+.btn-local{background:linear-gradient(135deg,#e65100,#bf360c)}
 .btn-download:hover{opacity:.9;transform:scale(1.03)}
-.btn-download.disabled{
-  background:#ccc;
-  cursor:not-allowed;
-  opacity:.6;
-}
-
-/* === Empty State === */
-.empty-state{
-  text-align:center;
-  padding:60px 0;
-  color:#999;
-}
+.empty-state{text-align:center;padding:60px 0;color:#999}
 .empty-icon{font-size:3rem;margin-bottom:12px}
-.empty-state p{font-size:1.05rem}
-
-/* === Footer === */
-.footer{
-  text-align:center;
-  padding:24px;
-  color:#999;
-  font-size:.8rem;
-  border-top:1px solid #e8eaed;
-  background:#fff;
-}
+.footer{text-align:center;padding:24px;color:#999;font-size:.8rem;border-top:1px solid #e8eaed;background:#fff}
 .footer-small{font-size:.72rem;margin-top:4px;opacity:.7}
-
-/* === Responsive === */
 @media(max-width:768px){
   .site-title{font-size:1.5rem}
   .header{padding:32px 16px 28px}

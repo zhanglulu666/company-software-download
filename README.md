@@ -1,44 +1,44 @@
 # 📦 公司常用软件下载站
 
-Windows 必备软件合集，每周一自动更新安装包。基于 GitHub Pages + Actions 构建。
+Windows 必备软件合集，一键直达官网下载。
 
 ## 🌐 访问地址
 
+https://zhanglulu666.github.io/company-software-download/
+
+## 📋 软件列表
+
+| 软件 | 下载方式 |
+|------|---------|
+| 谷歌 Chrome | 跳转官网 |
+| 搜狗浏览器 | 跳转官网 |
+| 企业微信 | 跳转官网 |
+| Zoom 会议 | 跳转官网 |
+| 腾讯会议 | 跳转官网 |
+| Office Tool Plus | 跳转官网 |
+| 7-Zip | 跳转官网 |
+| WinRAR | 跳转官网 |
+| KMS 激活脚本 | 本地下载（联系管理员） |
+
+## 🛠 如何添加/更新软件
+
+编辑 `software.json`，添加新条目：
+
+```json
+{
+  "id": "my-software",
+  "name": "软件名称",
+  "name_en": "Software Name",
+  "description": "软件描述",
+  "category": "分类",
+  "download_url": "https://官网下载地址",
+  "download_type": "link",
+  "icon": "📦"
+}
 ```
-https://<你的用户名>.github.io/<仓库名>/
-```
 
-## 📋 包含软件
+如需托管安装包，把文件放到 `files/` 目录，设置 `download_type: "local"`，`download_url: "files/文件名.exe"`。
 
-| 软件 | 类别 | 下载方式 |
-|------|------|---------|
-| 谷歌 Chrome | 浏览器 | 官方直链 |
-| 搜狗浏览器 | 浏览器 | 官网抓取 |
-| 企业微信 | 通讯办公 | 官网抓取 |
-| Zoom 会议 | 通讯办公 | 官方直链 |
-| 腾讯会议 | 通讯办公 | 官网抓取 |
-| Office Tool Plus | 系统工具 | GitHub Releases |
-| 7-Zip | 系统工具 | GitHub Releases |
-| WinRAR | 系统工具 | 中文官网抓取 |
-| KMS 激活脚本 | 系统工具 | GitHub Releases (加密) |
+## 🚀 部署
 
-## 🔄 自动更新
-
-- **定时**: 每周一凌晨 0:00 (北京时间) 自动运行
-- **手动**: 在 Actions 页面点击 `Run workflow`
-- 只下载版本有变化的软件，避免重复流量
-- 安装包上传到 GitHub Releases
-
-## 🛠️ 本地运行
-
-```bash
-pip install requests beautifulsoup4 pyminizip
-mkdir -p downloads
-python scripts/update.py
-```
-
-然后打开 `index.html` 即可预览网站。
-
-## 🔒 KMS 说明
-
-KMS 激活脚本使用 [Microsoft Activation Scripts (MAS)](https://github.com/massgravel/Microsoft-Activation-Scripts)，为开源合法脚本。下载包已加密，密码请咨询管理员。
+推送代码到 `main` 分支即自动部署到 GitHub Pages。
