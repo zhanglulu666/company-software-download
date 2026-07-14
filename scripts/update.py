@@ -4,21 +4,15 @@
 - 从官方源下载最新 Windows 安装包
 - 计算 SHA256 校验值
 - 更新 software.json
-- 输出文件路径供 GitHub Actions 上传到 Release
 """
 
 import hashlib
 import json
 import os
 import re
-import shutil
 import sys
-import tempfile
-import zipfile
-import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib.parse import urljoin
 from typing import Optional, Tuple
 
 import requests
@@ -32,7 +26,6 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent
 MANIFEST_PATH = REPO_ROOT / "software.json"
 DOWNLOADS_DIR = REPO_ROOT / "downloads"
-KMS_ZIP_PASSWORD = "company"  # 公司名缩写，KMS zip 加密密码
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
@@ -46,6 +39,7 @@ GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN", "")
 # ============================================================
 
 def sha256_file(path: Path) -> str:
+    """Calculate SHA256 checksum of a file."""
     h = hashlib.sha256()
     with open(path, "rb") as f:
         for chunk in iter(lambda: f.read(65536), b""):
@@ -54,7 +48,7 @@ def sha256_file(path: Path) -> str:
 
 
 def download_file(url: str, dest: Path, timeout: int = 600) -> bool:
-    """Download a file with progress logging. Returns True on success."""
+    """Download a file with progress logging."""
     print(f"  ⬇ 下载: {url}")
     try:
         resp = requests.get(url, headers=HEADERS, stream=True, timeout=timeout, allow_redirects=True)
@@ -62,13 +56,13 @@ def download_file(url: str, dest: Path, timeout: int = 600) -> bool:
         total = int(resp.headers.get("content-length", 0))
         downloaded = 0
         with open(dest, "wb") as f:
-            for chunk in resp.iter_content(chunk_size=1 << 20):  # 1MB chunks
+            for chunk in resp.iter_content(chunk_size=1 << 20):
                 f.write(chunk)
                 downloaded += len(chunk)
                 if total:
                     pct = downloaded * 100 // total
-                    if pct % 20 == 0:
-                        print(f"    {pct}% ({downloaded // (1 << 20)}/{total // (1 << 20)} MB)")
+                    if pct % 25 == 0:
+                        print(f"    {pct}% ({downloaded // (1 << 20)} MB)")
         size_mb = os.path.getsize(dest) / (1024 * 1024)
         print(f"    ✅ 完成 ({size_mb:.1f} MB)")
         return True
@@ -80,12 +74,12 @@ def download_file(url: str, dest: Path, timeout: int = 600) -> bool:
 
 
 def extract_version_from_filename(filename: str) -> Optional[str]:
-    """Try to extract version string from a filename."""
+    """Try to extract version from a filename or URL."""
     patterns = [
-        r"(\d+\.\d+\.\d+\.\d+)",   # 4.1.38.6012
-        r"(\d+\.\d+\.\d+)",         # 14.3.2
-        r"(\d+\.\d+)",              # 7.1
-        r"v?(\d[\d.]+\d)",          # v3.29.11
+        r"(\d+\.\d+\.\d+\.\d+)",
+        r"(\d+\.\d+\.\d+)",
+        r"(\d+\.\d+)",
+        r"v?(\d[\d.]+\d)",
     ]
     for pat in patterns:
         m = re.search(pat, filename)
@@ -99,7 +93,7 @@ def extract_version_from_filename(filename: str) -> Optional[str]:
 # ============================================================
 
 def download_direct(software: dict) -> Optional[Tuple[str, float, str]]:
-    """Direct URL download. Returns (version, size_mb, filepath) or None."""
+    """Direct URL download."""
     url = software.get("download_source", "")
     name = software["id"]
     ext = ".exe"
@@ -115,7 +109,6 @@ def download_direct(software: dict) -> Optional[Tuple[str, float, str]]:
     size_mb = os.path.getsize(dest) / (1024 * 1024)
     sha = sha256_file(dest)
 
-    # Try extracting version from redirected URL or filename
     try:
         resp = requests.head(url, headers=HEADERS, allow_redirects=True, timeout=30)
         final_url = resp.url
@@ -127,7 +120,7 @@ def download_direct(software: dict) -> Optional[Tuple[str, float, str]]:
 
 
 def download_github_release(software: dict) -> Optional[Tuple[str, float, str]]:
-    """Download from GitHub Releases API. Returns (version, size_mb, filepath)."""
+    """Download from GitHub Releases API."""
     repo = software.get("download_source", "")
     pattern = software.get("asset_pattern", ".*")
     name = software["id"]
@@ -150,12 +143,10 @@ def download_github_release(software: dict) -> Optional[Tuple[str, float, str]]:
     version = tag.lstrip("v")
     assets = release.get("assets", [])
 
-    # Find matching asset
     pat = re.compile(pattern, re.IGNORECASE)
     matched = None
     for asset in assets:
-        name_asset = asset.get("name", "")
-        if pat.search(name_asset):
+        if pat.search(asset.get("name", "")):
             matched = asset
             break
 
@@ -170,11 +161,9 @@ def download_github_release(software: dict) -> Optional[Tuple[str, float, str]]:
     ext = Path(asset_name).suffix or ".zip"
     dest = DOWNLOADS_DIR / f"{name}{ext}"
 
-    # Use custom Accept header for download to avoid API rate limiting
-    dl_headers = {**HEADERS}
+    dl_headers = {**HEADERS, "Accept": "application/octet-stream"}
     if GITHUB_TOKEN:
         dl_headers["Authorization"] = f"Bearer {GITHUB_TOKEN}"
-    dl_headers["Accept"] = "application/octet-stream"
 
     print(f"  ⬇ 下载: {asset_name} ({matched.get('size', 0) / (1 << 20):.1f} MB)")
     try:
@@ -188,7 +177,7 @@ def download_github_release(software: dict) -> Optional[Tuple[str, float, str]]:
                 downloaded += len(chunk)
                 if total:
                     pct = downloaded * 100 // total
-                    if pct % 20 == 0:
+                    if pct % 25 == 0:
                         print(f"    {pct}%")
         size_mb = os.path.getsize(dest) / (1024 * 1024)
         print(f"    ✅ 完成 ({size_mb:.1f} MB)")
@@ -203,11 +192,11 @@ def download_github_release(software: dict) -> Optional[Tuple[str, float, str]]:
 
 
 def download_scrape(software: dict) -> Optional[Tuple[str, float, str]]:
-    """Scrape download URL from a web page. Returns (version, size_mb, filepath)."""
+    """Scrape download URL from a web page."""
     name = software["id"]
     source_url = software.get("download_source", "")
 
-    # Try direct scrape_url first if provided
+    # Try direct scrape_url first
     scrape_url = software.get("scrape_url", "")
     if scrape_url:
         ext = ".exe"
@@ -220,7 +209,7 @@ def download_scrape(software: dict) -> Optional[Tuple[str, float, str]]:
             sha = sha256_file(dest)
             return version, size_mb, sha
 
-    # Fallback: try scraping the page
+    # Fallback: scrape the page for download links
     print(f"  🔍 抓取页面: {source_url}")
     try:
         resp = requests.get(source_url, headers=HEADERS, timeout=30)
@@ -231,16 +220,12 @@ def download_scrape(software: dict) -> Optional[Tuple[str, float, str]]:
 
     soup = BeautifulSoup(resp.text, "html.parser")
 
-    # Look for download links (common patterns)
     candidate_urls = []
     for a in soup.find_all("a", href=True):
         href = a["href"]
         if any(k in href.lower() for k in [".exe", "download", "setup"]):
+            from urllib.parse import urljoin
             candidate_urls.append(urljoin(source_url, href))
-
-    # Also check for onclick handlers and data attributes
-    for elem in soup.find_all(attrs={"data-url": True}):
-        candidate_urls.append(urljoin(source_url, elem["data-url"]))
 
     for url in candidate_urls:
         if not url.lower().endswith((".exe", ".msi", ".zip")):
@@ -258,76 +243,8 @@ def download_scrape(software: dict) -> Optional[Tuple[str, float, str]]:
             sha = sha256_file(dest)
             return version, size_mb, sha
 
-    print(f"    ❌ 未找到可下载的链接")
+    print(f"    ❌ 未找到可下载链接")
     return None
-
-
-# ============================================================
-# Special: KMS Activation (Encrypt zip)
-# ============================================================
-
-def process_kms(software: dict, result: Optional[Tuple[str, float, str]]) -> Optional[Tuple[str, float, str]]:
-    """Re-package KMS zip with password encryption."""
-    if not result or not software.get("encrypt_zip"):
-        return result
-
-    version, size_mb, sha = result
-    name = software["id"]
-    src_zip = DOWNLOADS_DIR / f"{name}.zip"
-    encrypted_zip = DOWNLOADS_DIR / f"{name}_encrypted.zip"
-
-    print(f"  🔒 加密打包 KMS (密码: {KMS_ZIP_PASSWORD})")
-    try:
-        # Use Python's zipfile (doesn't support encryption natively with standard lib)
-        # So we use the pyminizip library or fall back to a note
-        try:
-            import pyminizip
-            pyminizip.compress(str(src_zip), None, str(encrypted_zip), KMS_ZIP_PASSWORD, 5)
-            encrypted_zip.unlink(missing_ok=True)
-            src_zip.rename(encrypted_zip)
-            print(f"    ✅ 加密完成")
-            size_mb = os.path.getsize(encrypted_zip) / (1024 * 1024)
-            sha = sha256_file(encrypted_zip)
-            return version, size_mb, sha
-        except ImportError:
-            # Fallback: create a zip with a text file containing the password + the original zip base64 encoded
-            print(f"    ⚠️ pyminizip 未安装，使用备用加密方案")
-            import base64
-
-            # Create an encrypted container: text note + base64 of original
-            with open(src_zip, "rb") as f:
-                b64_data = base64.b64encode(f.read()).decode()
-
-            # Use PowerShell to create password-protected zip (Windows)
-            ps_script = f'''
-            $zip = "{encrypted_zip}"
-            $src = "{src_zip}"
-            $pwd = "{KMS_ZIP_PASSWORD}"
-            # 7z-based encryption if available
-            if (Get-Command "7z.exe" -ErrorAction SilentlyContinue) {{
-                7z a -p$pwd -mhe=on "$zip" "$src"
-            }} else {{
-                # Fallback: use Compress-Archive then add password hint
-                Compress-Archive -Path "$src" -DestinationPath "$zip" -Force
-            }}
-            '''
-            result_ps = subprocess.run(
-                ["powershell", "-NoProfile", "-Command", ps_script],
-                capture_output=True, text=True, timeout=120
-            )
-            if encrypted_zip.exists():
-                src_zip.unlink(missing_ok=True)
-                os.rename(encrypted_zip, src_zip)
-                size_mb = os.path.getsize(src_zip) / (1024 * 1024)
-                sha = sha256_file(src_zip)
-                print(f"    ✅ 加密完成")
-                return version, size_mb, sha
-            else:
-                print(f"    ⚠️ 加密失败，保留原文件")
-                return result
-    except Exception as e:
-        print(f"    ❌ 加密失败: {e}")
-        return result
 
 
 # ============================================================
@@ -356,15 +273,16 @@ def update_software(software: dict) -> bool:
         print(f"   ❌ 未知下载方法: {method}")
         return False
 
-    result = fn(software)
+    try:
+        result = fn(software)
+    except Exception as e:
+        print(f"   ❌ 异常: {e}")
+        return False
+
     if not result:
         print(f"   ❌ 更新失败")
         return False
 
-    version, size_mb, sha = result
-
-    # Special handling for KMS encryption
-    result = process_kms(software, result)
     version, size_mb, sha = result
 
     # Check if version changed
@@ -378,8 +296,7 @@ def update_software(software: dict) -> bool:
     software["size_mb"] = round(size_mb, 1)
     software["sha256"] = sha
 
-    # The download_url will be filled by GitHub Actions (release asset URL)
-    # For now, set a placeholder
+    # Store local file info for GitHub Actions
     ext = ".exe"
     for f in DOWNLOADS_DIR.glob(f"{sid}.*"):
         ext = f.suffix
@@ -397,7 +314,6 @@ def main():
     print(f"   时间: {datetime.now(timezone.utc).isoformat()}")
     print("=" * 60)
 
-    # Load manifest
     if not MANIFEST_PATH.exists():
         print(f"❌ 未找到 {MANIFEST_PATH}")
         sys.exit(1)
@@ -405,7 +321,6 @@ def main():
     with open(MANIFEST_PATH, "r", encoding="utf-8") as f:
         manifest = json.load(f)
 
-    # Clean and create downloads dir
     DOWNLOADS_DIR.mkdir(exist_ok=True)
 
     updated = False
@@ -420,27 +335,22 @@ def main():
             print(f"   ❌ 异常: {e}")
             continue
 
-    # Update timestamp
     manifest["last_updated"] = datetime.now(timezone.utc).isoformat()
 
-    # Write back
     with open(MANIFEST_PATH, "w", encoding="utf-8") as f:
         json.dump(manifest, f, ensure_ascii=False, indent=2)
 
-    # Print summary
     print(f"\n{'='*60}")
     if updated:
         print(f"✅ 更新了 {len(updated_list)} 个软件: {', '.join(updated_list)}")
     else:
         print(f"✅ 所有软件均为最新版本，无需更新")
 
-    # Output downloadable files for GitHub Actions
-    print(f"\n📁 下载文件列表:")
     download_files = list(DOWNLOADS_DIR.glob("*"))
+    print(f"\n📁 下载文件列表 ({len(download_files)} 个):")
     for fp in sorted(download_files):
         size_mb = os.path.getsize(fp) / (1024 * 1024)
         print(f"   {fp.name} ({size_mb:.1f} MB)")
-    print(f"\n共 {len(download_files)} 个文件")
 
 
 if __name__ == "__main__":

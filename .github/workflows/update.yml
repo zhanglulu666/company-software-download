@@ -2,7 +2,6 @@
 
 on:
   schedule:
-    # 每周一凌晨 0:00 (UTC+8) = 周日 16:00 UTC
     - cron: "0 16 * * 0"
   workflow_dispatch:
     inputs:
@@ -21,9 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/checkout@v5
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -32,8 +29,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install requests beautifulsoup4 pyminizip
-          sudo apt-get update && sudo apt-get install -y p7zip-full  # for KMS zip encryption fallback
+          pip install requests beautifulsoup4
 
       - name: Run update script
         env:
@@ -46,11 +42,9 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest
-          name: "软件包 - ${{ github.event.repository.updated_at }}"
+          name: "软件包 - 每周更新"
           body: |
             ## 📦 公司常用软件安装包
-
-            更新时间：${{ github.event.repository.updated_at }}
 
             本 Release 包含所有常用软件的 Windows 安装包。
             下载后请核对 SHA256 校验值（见软件页面）。
@@ -66,17 +60,15 @@ jobs:
           import json, os
           with open('software.json', 'r', encoding='utf-8') as f:
               manifest = json.load(f)
-          
           repo_url = os.environ.get('GITHUB_SERVER_URL', 'https://github.com') + '/' + os.environ.get('GITHUB_REPOSITORY', '')
           for sw in manifest['software']:
               if sw.get('_asset_name'):
-                  sw['download_url'] = f\"{repo_url}/releases/latest/download/{sw['_asset_name']}\"
+                  sw['download_url'] = repo_url + '/releases/latest/download/' + sw['_asset_name']
                   sw.pop('_local_file', None)
                   sw.pop('_asset_name', None)
-          
           with open('software.json', 'w', encoding='utf-8') as f:
               json.dump(manifest, f, ensure_ascii=False, indent=2)
-          print('Updated software.json with GitHub Release URLs')
+          print('Updated software.json with download URLs')
           "
 
       - name: Commit updated manifest
@@ -90,14 +82,13 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Build Pages (just copy static files)
+      - name: Build Pages
         run: |
           mkdir -p _site
           cp index.html style.css software.json _site/
-          # Create .nojekyll to avoid Jekyll processing
           touch _site/.nojekyll
 
-      - name: Deploy to GitHub Pages
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: _site
