@@ -301,8 +301,9 @@ def update_software(software: dict) -> bool:
     for f in DOWNLOADS_DIR.glob(f"{sid}.*"):
         ext = f.suffix
         break
-    software["_local_file"] = str(DOWNLOADS_DIR / f"{sid}{ext}")
-    software["_asset_name"] = f"{sid}-{version}{ext}"
+    local_file = DOWNLOADS_DIR / f"{sid}{ext}"
+    software["_local_file"] = str(local_file)
+    software["_asset_name"] = local_file.name
 
     print(f"   ✅ 更新完成: v{version} ({size_mb:.1f} MB)")
     return True
