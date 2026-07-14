@@ -48,7 +48,10 @@
     var data=null,activeCategory="all";
 
     function renderPinned(pinned){
-      if(!pinned||!pinned.length){document.getElementById("pinnedSection").style.display="none";return;}
+      if(!pinned||!pinned.length){
+        document.getElementById("pinnedSection").style.display="none";
+        return;
+      }
       var grid=document.getElementById("pinnedGrid");
       grid.innerHTML=pinned.map(function(x){
         return '<div class="card card-pinned">'+
@@ -64,10 +67,12 @@
       }).join("");
     }
 
-    function renderFilters(categories){
+    function renderFilters(cats){
       var c=document.getElementById("filters");
       var h='<button class="filter-btn active" data-cat="all">全部</button>';
-      categories.forEach(function(cat){h+='<button class="filter-btn" data-cat="'+cat+'">'+cat+'</button>'});
+      cats.forEach(function(cat){
+        h+='<button class="filter-btn" data-cat="'+cat+'">'+cat+'</button>';
+      });
       c.innerHTML=h;
       c.querySelectorAll(".filter-btn").forEach(function(b){
         b.addEventListener("click",function(){
@@ -86,7 +91,7 @@
 
       var filtered=data.software.filter(function(x){
         var mc=activeCategory==="all"||x.category===activeCategory;
-        var ms=!s||x.name.toLowerCase().includes(s)||x.name_en.toLowerCase().includes(s)||x.description.toLowerCase().includes(s);
+        var ms=!s||x.name.toLowerCase().indexOf(s)>=0||x.name_en.toLowerCase().indexOf(s)>=0||x.description.toLowerCase().indexOf(s)>=0;
         return mc&&ms;
       });
 
@@ -97,7 +102,6 @@
         var isLink=x.download_type==="link";
         var label=isLink?"🔗 官网下载":"⬇ 直接下载";
         var cls=isLink?"btn-download btn-link":"btn-download btn-local";
-        var target=isLink?' target="_blank" rel="noopener' in document.createElement('a')?' target="_blank" rel="noopener"':"";
         return '<div class="card">'+
           '<div class="card-icon">'+(x.icon||"📦")+'</div>'+
           '<div class="card-body">'+
@@ -115,18 +119,26 @@
       }).join("");
     }
 
-    fetch("software.json").then(function(r){return r.json()}).then(function(j){
-      data=j;
-      renderPinned(j.pinned);
-      var cats=[];j.software.forEach(function(x){if(cats.indexOf(x.category)===-1)cats.push(x.category)});
-      renderFilters(cats);renderGrid();
-    }).catch(function(e){
-      document.getElementById("softwareGrid").innerHTML='<div class="loading error">⚠️ 加载失败：'+e.message+'</div>';
-    });
+    fetch("software.json")
+      .then(function(r){return r.json();})
+      .then(function(j){
+        data=j;
+        renderPinned(j.pinned);
+        var cats=[];
+        j.software.forEach(function(x){
+          if(cats.indexOf(x.category)===-1) cats.push(x.category);
+        });
+        renderFilters(cats);
+        renderGrid();
+      })
+      .catch(function(e){
+        document.getElementById("softwareGrid").innerHTML='<div class="loading error">⚠️ 加载失败：'+e.message+'</div>';
+      });
 
     document.getElementById("searchInput").addEventListener("input",renderGrid);
     document.getElementById("searchClear").addEventListener("click",function(){
-      document.getElementById("searchInput").value="";renderGrid();
+      document.getElementById("searchInput").value="";
+      renderGrid();
     });
   })();
   </script>
