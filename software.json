@@ -135,16 +135,6 @@
       "icon": "🖥️"
     },
     {
-      "id": "av-software",
-      "name": "公司杀毒软件",
-      "name_en": "Company Antivirus",
-      "description": "公司统一杀毒防护软件",
-      "category": "安全软件",
-      "download_url": "files/公司杀毒软件.exe",
-      "download_type": "local",
-      "icon": "🛡️"
-    },
-    {
       "id": "asset-management",
       "name": "公司资产管理软件",
       "name_en": "Asset Management",
