@@ -42,8 +42,7 @@
       "download_url": "",
       "download_method": "scrape",
       "download_source": "https://work.weixin.qq.com/",
-      "scrape_url": "https://dldir1.qq.com/wework/work_weixin/WeCom_4.1.38.6012.exe",
-      "fallback_scrape": "https://work.weixin.qq.com/wework_admin/commdownload?platform=win",
+      "scrape_url": "https://dldir1v6.qq.com/wework/work_weixin/WeCom_4.1.42.6018.exe",
       "icon": "💼"
     },
     {
@@ -72,7 +71,7 @@
       "download_url": "",
       "download_method": "scrape",
       "download_source": "https://meeting.tencent.com/download/",
-      "scrape_url": "https://updatecdn.meeting.qq.com/cos/latest/TencentMeeting_0300000000_3.29.11.429.publish.exe",
+      "scrape_url": "https://updatecdn.meeting.qq.com/cos/latest/TencentMeeting_0300000000_3.31.11.431.publish.exe",
       "icon": "🎥"
     },
     {
@@ -117,14 +116,14 @@
       "download_url": "https://github.com/zhanglulu666/company-software-download/releases/latest/download/winrar-1.4.0.exe",
       "download_method": "scrape",
       "download_source": "https://www.winrar.com.cn/download.htm",
-      "scrape_url": "https://www.winrar.com.cn/download/winrar-x64-701sc.exe",
+      "scrape_url": "https://www.winrar.com.cn/download/winrar-x64-710sc.exe",
       "icon": "📦"
     },
     {
       "id": "kms-activation",
       "name": "KMS 激活脚本",
       "name_en": "KMS Activation (MAS)",
-      "description": "Microsoft Activation Scripts - 开源 Windows/Office 激活工具（zip 加密，密码请咨询管理员）",
+      "description": "Microsoft Activation Scripts - 开源 Windows/Office 激活工具",
       "category": "系统工具",
       "version": "",
       "size_mb": 0,
@@ -133,8 +132,6 @@
       "download_method": "github_release",
       "download_source": "massgravel/Microsoft-Activation-Scripts",
       "asset_pattern": "MAS_*.zip",
-      "encrypt_zip": true,
-      "zip_password_hint": "公司名缩写（咨询管理员）",
       "icon": "🔑"
     }
   ]

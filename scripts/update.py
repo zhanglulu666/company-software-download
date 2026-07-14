@@ -112,7 +112,7 @@ def download_direct(software: dict) -> Optional[Tuple[str, float, str]]:
     try:
         resp = requests.head(url, headers=HEADERS, allow_redirects=True, timeout=30)
         final_url = resp.url
-        version = extract_version_from_filename(final_url) or "latest"
+        version = extract_version_from_url(final_url) or "latest"
     except Exception:
         version = "latest"
 
@@ -238,7 +238,7 @@ def download_scrape(software: dict) -> Optional[Tuple[str, float, str]]:
 
         dest = DOWNLOADS_DIR / f"{name}{ext}"
         if download_file(url, dest):
-            version = extract_version_from_filename(url) or "latest"
+            version = extract_version_from_url(url) or "latest"
             size_mb = os.path.getsize(dest) / (1024 * 1024)
             sha = sha256_file(dest)
             return version, size_mb, sha
