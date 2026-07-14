@@ -11,11 +11,15 @@
     <div class="header-inner">
       <h1 class="site-title">📦 公司常用软件下载站</h1>
       <p class="site-subtitle">Windows 必备软件合集 · 一键直达官网下载</p>
-      <p class="site-tip">💡 点击「官网下载」跳转到各软件官方下载页面</p>
     </div>
   </header>
 
   <main class="main">
+    <div class="section pinned-section" id="pinnedSection">
+      <h2 class="section-title">📌 常用文档</h2>
+      <div class="grid grid-pinned" id="pinnedGrid"></div>
+    </div>
+
     <div class="toolbar">
       <div class="search-wrapper">
         <span class="search-icon">🔍</span>
@@ -35,13 +39,30 @@
   </main>
 
   <footer class="footer">
-    <p>本站所有软件均链接至官方网站，仅供公司内部使用</p>
+    <p>本站所有软件均来自官方网站或公司内部，仅供内部使用</p>
     <p class="footer-small">Powered by GitHub Pages</p>
   </footer>
 
   <script>
   (function(){
     var data=null,activeCategory="all";
+
+    function renderPinned(pinned){
+      if(!pinned||!pinned.length){document.getElementById("pinnedSection").style.display="none";return;}
+      var grid=document.getElementById("pinnedGrid");
+      grid.innerHTML=pinned.map(function(x){
+        return '<div class="card card-pinned">'+
+          '<div class="card-icon">'+(x.icon||"📄")+'</div>'+
+          '<div class="card-body">'+
+            '<h3 class="card-title">'+x.name+'</h3>'+
+            '<p class="card-desc">'+x.description+'</p>'+
+          '</div>'+
+          '<div class="card-actions">'+
+            '<a href="'+x.download_url+'" class="btn-download btn-doc">📥 下载</a>'+
+          '</div>'+
+        '</div>';
+      }).join("");
+    }
 
     function renderFilters(categories){
       var c=document.getElementById("filters");
@@ -76,7 +97,7 @@
         var isLink=x.download_type==="link";
         var label=isLink?"🔗 官网下载":"⬇ 直接下载";
         var cls=isLink?"btn-download btn-link":"btn-download btn-local";
-        var target=isLink?' target="_blank" rel="noopener"':"";
+        var target=isLink?' target="_blank" rel="noopener' in document.createElement('a')?' target="_blank" rel="noopener"':"";
         return '<div class="card">'+
           '<div class="card-icon">'+(x.icon||"📦")+'</div>'+
           '<div class="card-body">'+
@@ -88,7 +109,7 @@
             '</div>'+
           '</div>'+
           '<div class="card-actions">'+
-            '<a href="'+x.download_url+'" class="'+cls+'"'+target+'>'+label+'</a>'+
+            '<a href="'+x.download_url+'" class="'+cls+'" target="_blank" rel="noopener">'+label+'</a>'+
           '</div>'+
         '</div>';
       }).join("");
@@ -96,6 +117,7 @@
 
     fetch("software.json").then(function(r){return r.json()}).then(function(j){
       data=j;
+      renderPinned(j.pinned);
       var cats=[];j.software.forEach(function(x){if(cats.indexOf(x.category)===-1)cats.push(x.category)});
       renderFilters(cats);renderGrid();
     }).catch(function(e){

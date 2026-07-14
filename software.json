@@ -1,5 +1,28 @@
 {
   "last_updated": "",
+  "pinned": [
+    {
+      "id": "doc-ax-login",
+      "name": "2025年AX登录教程",
+      "description": "公司AX系统登录配置指南",
+      "icon": "📘",
+      "download_url": "files/2025年ax登录教程.pptx"
+    },
+    {
+      "id": "doc-c-clean",
+      "name": "C盘清理与Outlook邮箱扩容培训",
+      "description": "系统优化与邮箱管理教程",
+      "icon": "📗",
+      "download_url": "files/C盘清理与Outlook 邮箱扩容培训.pptx"
+    },
+    {
+      "id": "doc-software-guide",
+      "name": "公司通讯软件下载流程",
+      "description": "各通讯软件的下载安装说明",
+      "icon": "📙",
+      "download_url": "files/关于公司通讯软件下载流程.docx"
+    }
+  ],
   "software": [
     {
       "id": "chrome",
@@ -52,6 +75,16 @@
       "icon": "🎥"
     },
     {
+      "id": "potplayer",
+      "name": "PotPlayer 播放器",
+      "name_en": "PotPlayer",
+      "description": "全能视频播放器，支持几乎所有格式",
+      "category": "媒体工具",
+      "download_url": "https://potplayer.daum.net/",
+      "download_type": "link",
+      "icon": "▶️"
+    },
+    {
       "id": "office-tool",
       "name": "Office Tool Plus",
       "name_en": "Office Tool Plus",
@@ -83,13 +116,73 @@
     },
     {
       "id": "kms-activation",
-      "name": "KMS 激活脚本",
-      "name_en": "KMS Activation (MAS)",
-      "description": "Microsoft Activation Scripts - 开源 Windows/Office 激活工具（联系管理员获取）",
+      "name": "Windows/Office 激活工具",
+      "name_en": "KMS Activation",
+      "description": "Windows 和 Office 激活工具（老版本，稳定可用）",
       "category": "系统工具",
-      "download_url": "files/kms-mas.zip",
+      "download_url": "files/windows和office激活老版本.zip",
       "download_type": "local",
       "icon": "🔑"
+    },
+    {
+      "id": "receiver",
+      "name": "Citrix Receiver",
+      "name_en": "Citrix Receiver 4.5",
+      "description": "远程桌面与虚拟应用接入客户端",
+      "category": "办公软件",
+      "download_url": "files/Receiver 4.5 for Windows.exe",
+      "download_type": "local",
+      "icon": "🖥️"
+    },
+    {
+      "id": "av-software",
+      "name": "公司杀毒软件",
+      "name_en": "Company Antivirus",
+      "description": "公司统一杀毒防护软件",
+      "category": "安全软件",
+      "download_url": "files/公司杀毒软件.exe",
+      "download_type": "local",
+      "icon": "🛡️"
+    },
+    {
+      "id": "asset-management",
+      "name": "公司资产管理软件",
+      "name_en": "Asset Management",
+      "description": "公司资产登记与管理工具",
+      "category": "办公软件",
+      "download_url": "files/公司资产管理软件.exe",
+      "download_type": "local",
+      "icon": "📊"
+    },
+    {
+      "id": "uninstaller",
+      "name": "卸载清理软件",
+      "name_en": "Uninstaller/Cleaner",
+      "description": "彻底卸载和清理残留文件的工具",
+      "category": "系统工具",
+      "download_url": "files/卸载清理软件.exe",
+      "download_type": "local",
+      "icon": "🧹"
+    },
+    {
+      "id": "sunlogin",
+      "name": "向日葵远程",
+      "name_en": "Sunlogin",
+      "description": "远程桌面控制软件（简洁版）",
+      "category": "远程工具",
+      "download_url": "files/向日葵简洁版.exe",
+      "download_type": "local",
+      "icon": "☀️"
+    },
+    {
+      "id": "driver-ceo",
+      "name": "驱动总裁",
+      "name_en": "Driver CEO 2.17",
+      "description": "万能驱动安装与管理工具",
+      "category": "系统工具",
+      "download_url": "files/驱动总裁2.17.0.0.exe",
+      "download_type": "local",
+      "icon": "⚙️"
     }
   ]
 }
